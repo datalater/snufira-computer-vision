@@ -5,16 +5,109 @@
 \- [Udacity, Introduction to Computer Vision (YouTube) ](https://www.youtube.com/playlist?list=PLAwxTw4SYaPnbDacyrK_kB_RUkuxQBlCm)  
 
 **RESUME**  
-\- `https://classroom.udacity.com/courses/ud810/lessons/3490398568/concepts/34996085680923`
+\- `https://classroom.udacity.com/courses/ud810/lessons/3452628581/concepts/34027789540923`
+
+**RULE**  
+\- [YouTube 동영상 스크린샷 사이트](http://www.youtubescreenshot.com/)  
+\- 첨부 이미지 width는 800으로 고정
 
 ---
 
-## Introduction
+## 02 Images as Functions
+
+### 이미지를 다른 관점으로 보기
+
+1. 특정 범위의 숫자로 이루어진 2차원 배열
+2. x값과 y값으로 구성되는 `함수` $I$ (또는 $f$)
+3. 카메라로 만들어지는 어떤 것
+
+> **Note:** `함수` : 이미지를 함수로 보면, 이미지 내 모든 픽셀 값이 output이 되고 input은 좌표 (x, y)값이 된다. 즉, 이미지는 서로 다른 위치의 펙셀 값을 하나로 모은 것이라고 할 수 있다.
+
+### Math :: 흑백 이미지를 함수로 보기
+
+![images-as-functions](images/images-as-functions2.png)
+
++ $f(x, y)$는 `좌표 (x, y)`에 해당하는 `픽셀`의 강도(intensity) 또는 값(value)을 의미한다.
+
+> **Note:** `픽셀` : 컴퓨터에서 이미지를 구성하는 기본 단위 (pixel stands for picture elemetns)
+
+$$f: [a \ b] \ x \ [c \ d] \Rightarrow [min, max] $$
+
++ 그런데 함수 $f$는 minimum value와 maximum value라는 range를 가진다.
++ 흑백이므로 컬러 없이 밝기(lightness)로만 픽셀 값을 정할 수 있다.
++ min : black
++ max : white
++ 핑크색 동그라미를 x, y 좌표의 origin(원점)이라고 할 때 x좌표와 y좌표의 값도 특정 범주에 속하게 된다.
+
+> **Note:** `좌표 (x, y)` : 일반적으로 x축은 가로, y축은 세로를 의미한다.
+
+### Math :: 컬러 이미지를 함수로 보기
+
+![images-as-functions](images/images-as-functions3.png)
+
+$$f(x, y) = \ \begin{bmatrix}
+r(x,y) \\
+g(x,y) \\
+b(x,y)
+\end{bmatrix}$$
+
++ 흑백 이미지와 다르게 3가지 컬러 값으로 표현하므로 함수의 값이 vector로 표현된다.
++ 모든 이미지는 x좌표와 y좌표로 구성된 2차원이므로 $f: R^{2}$로 표현한다.
++ 그런데 함수의 값은 3가지 값으로 구성되므로 $f: R^{2} \rightarrow R^{3}$이 된다.
+
+### Computer (digital) :: 이미지를 디지타이즈하여 행렬로 보기
+
+![images-as-functions](images/images-as-functions4.png)
+
+1. (`Sample`) 격자 무늬의 2차원 공간에 표현
+2. (`Quantize`) 모든 샘플을 정수에 가깝도록 불연속적인 값으로 변환
+    + 컬러 값을 0부터 255까지의 정수로 나타내기
+3. (matrix) 모든 이미지가 정수 값으로 구성된 행렬로 표현됨
+
+> **Note:**   
+> `Sample` : 현실의 이미지는 연속적인 값을 가진다. 하지만 디지털로 나타내려면 불연속적인 값으로 나타내야 한다. 연속적인 값에서 불연속적인 값으로 특정 값을 추출하므로 샘플링한다고 표현한다.  
+> `Quantize` : '양자화'란 연속적인 값을 불연속적인 값으로 변환하는 것을 뜻한다.
+
+### Computer :: 이미지의 크기
+
+![images-as-functions](images/images-as-functions5.png)
+
++ 이미지의 크기를 알려면 먼저 픽셀의 수를 알아야 한다.
++ 픽셀의 수 (82560) = x축 크기 (258) * y축 크기 (320)
++ 한 픽셀 당 3가지 색을 표현한다.
++ 그런데 보통 1가지 색을 0~255의 값으로 표현할 때 $2^8$이므로 8bit, 즉 1byte의 메모리를 사용한다.
++ 따라서 한 픽셀을 표현하는데 3byte가 사용된다.
++ 그러므로 전체 이미지의 크기 (247,680byte = 약 241kb) = 픽셀의 수 (82560) * 픽셀 당 메모리 (3byte)
+
+### Octave 실습
+
+```
+% Load and display an image
+img = imread('dolphin.png');
+imshow(img);
+
+% size and class
+disp(size(img));       # 320 500
+disp(class(img));      # uint8
+```
+
++ `uint8` :
+    + u : unsigned (음수를 표현하지 않는 데이터 타입)
+    + int : integers
+    + 8 : bit depth (값을 저장할 수 있는 비트 크기)
+
+### RESUME: `https://classroom.udacity.com/courses/ud810/lessons/3452628581/concepts/34027789540923`
+
+---
+
+## 01 Introduction
 
 ### Computer Vision의 목표
 
 + 컴퓨터 비전의 목표는 "**이미지를 해석하는 컴퓨터 프로그램을 만드는 것**"이다.
-+ 왜냐하면 모든 이미지는 스토리를 담고 있기 때문이다.
++ 왜냐하면 모든 이미지는 `스토리`를 담고 있기 때문이다.
+
+> **Note:** `스토리` : 묘사 가능한 성질(able to make a description)
 
 ### Computer Vision의 원리
 
@@ -79,7 +172,6 @@
     + 3D imaging, MRI, CT
     + Image guided surgery (의사가 환자의 뇌를 수술할 때 두개골 속 이미지를 환자의 두개골 위에 보여준다. 벽에 영화를 보여주는 빔프로젝터처럼.)
 
-### RESUME : `https://classroom.udacity.com/courses/ud810/lessons/3490398568/concepts/34996085680923`
-
+**끝.**
 
 ---
