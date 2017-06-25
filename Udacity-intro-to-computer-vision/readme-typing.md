@@ -1,14 +1,14 @@
 ⓒ JMC 2017
 
 **SOURCE**  
-\- [Udacity, Introduction to Computer Vision](https://classroom.udacity.com/courses/ud810 )  
-\- [Udacity, Introduction to Computer Vision (YouTube) ](https://www.youtube.com/playlist?list=PLAwxTw4SYaPnbDacyrK_kB_RUkuxQBlCm )  
+\- [Udacity, Introduction to Computer Vision](https://classroom.udacity.com/courses/ud810)  
+\- [Udacity, Introduction to Computer Vision (YouTube) ](https://www.youtube.com/playlist?list=PLAwxTw4SYaPnbDacyrK_kB_RUkuxQBlCm)  
 
 **RESUME**  
 \- `https://classroom.udacity.com/courses/ud810/lessons/3452628581/concepts/34027789540923`
 
 **RULE**  
-\- [YouTube 동영상 스크린샷 사이트](http://www.youtubescreenshot.com/ )  
+\- [YouTube 동영상 스크린샷 사이트](http://www.youtubescreenshot.com/)  
 \- 첨부 이미지 width는 800으로 고정
 
 ---
@@ -18,22 +18,22 @@
 ### 이미지를 다른 관점으로 보기
 
 1. 특정 범위의 숫자로 이루어진 2차원 배열
-2. x값과 y값으로 구성되는 `함수` <img src="http://api.gmath.guru/cgi-bin/gmath?I"/> (또는 <img src="http://api.gmath.guru/cgi-bin/gmath?f"/>)
+2. x값과 y값으로 구성되는 `함수` $I$ (또는 $f$)
 3. 카메라로 만들어지는 어떤 것
 
 > **Note:** `함수` : 이미지를 함수로 보면, 이미지 내 모든 픽셀 값이 output이 되고 input은 좌표 (x, y)값이 된다. 즉, 이미지는 서로 다른 위치의 펙셀 값을 하나로 모은 것이라고 할 수 있다.
 
 ### Math :: 흑백 이미지를 함수로 보기
 
-![images-as-functions](images/images-as-functions2.png )
+![images-as-functions](images/images-as-functions2.png)
 
-+ <img src="http://api.gmath.guru/cgi-bin/gmath?f%28x%2C%20y%29"/>는 `좌표 (x, y)`에 해당하는 `픽셀`의 강도(intensity) 또는 값(value)을 의미한다.
++ $f(x, y)$는 `좌표 (x, y)`에 해당하는 `픽셀`의 강도(intensity) 또는 값(value)을 의미한다.
 
 > **Note:** `픽셀` : 컴퓨터에서 이미지를 구성하는 기본 단위 (pixel stands for picture elemetns)
 
-<p align="center"><img src="http://api.gmath.guru/cgi-bin/gmath?f%3A%20%5Ba%20%5C%20b%5D%20%5C%20x%20%5C%20%5Bc%20%5C%20d%5D%20%5CRightarrow%20%5Bmin%2C%20max%5D%20"/></p>
+$$f: [a \ b] \ x \ [c \ d] \Rightarrow [min, max] $$
 
-+ 그런데 함수 <img src="http://api.gmath.guru/cgi-bin/gmath?f"/>는 minimum value와 maximum value라는 range를 가진다.
++ 그런데 함수 $f$는 minimum value와 maximum value라는 range를 가진다.
 + 흑백이므로 컬러 없이 밝기(lightness)로만 픽셀 값을 정할 수 있다.
 + min : black
 + max : white
@@ -43,17 +43,21 @@
 
 ### Math :: 컬러 이미지를 함수로 보기
 
-![images-as-functions](images/images-as-functions3.png )
+![images-as-functions](images/images-as-functions3.png)
 
-<p align="center"><img src="http://api.gmath.guru/cgi-bin/gmath?f%28x%2C%20y%29%20%3D%20%5C%20%5Cbegin%7Bbmatrix%7D%0Dr%28x%2Cy%29%20%5C%5C%0Dg%28x%2Cy%29%20%5C%5C%0Db%28x%2Cy%29%0D%5Cend%7Bbmatrix%7D"/></p>
+$$f(x, y) = \ \begin{bmatrix}
+r(x,y) \\
+g(x,y) \\
+b(x,y)
+\end{bmatrix}$$
 
 + 흑백 이미지와 다르게 3가지 컬러 값으로 표현하므로 함수의 값이 vector로 표현된다.
-+ 모든 이미지는 x좌표와 y좌표로 구성된 2차원이므로 <img src="http://api.gmath.guru/cgi-bin/gmath?f%3A%20R%5E%7B2%7D"/>로 표현한다.
-+ 그런데 함수의 값은 3가지 값으로 구성되므로 <img src="http://api.gmath.guru/cgi-bin/gmath?f%3A%20R%5E%7B2%7D%20%5Crightarrow%20R%5E%7B3%7D"/>이 된다.
++ 모든 이미지는 x좌표와 y좌표로 구성된 2차원이므로 $f: R^{2}$로 표현한다.
++ 그런데 함수의 값은 3가지 값으로 구성되므로 $f: R^{2} \rightarrow R^{3}$이 된다.
 
 ### Computer (digital) :: 이미지를 디지타이즈하여 행렬로 보기
 
-![images-as-functions](images/images-as-functions4.png )
+![images-as-functions](images/images-as-functions4.png)
 
 1. (`Sample`) 격자 무늬의 2차원 공간에 표현
 2. (`Quantize`) 모든 샘플을 정수에 가깝도록 불연속적인 값으로 변환
@@ -66,12 +70,12 @@
 
 ### Computer :: 이미지의 크기
 
-![images-as-functions](images/images-as-functions5.png )
+![images-as-functions](images/images-as-functions5.png)
 
 + 이미지의 크기를 알려면 먼저 픽셀의 수를 알아야 한다.
 + 픽셀의 수 (82560) = x축 크기 (258) * y축 크기 (320)
 + 한 픽셀 당 3가지 색을 표현한다.
-+ 그런데 보통 1가지 색을 0~255의 값으로 표현할 때 <img src="http://api.gmath.guru/cgi-bin/gmath?2%5E8"/>이므로 8bit, 즉 1byte의 메모리를 사용한다.
++ 그런데 보통 1가지 색을 0~255의 값으로 표현할 때 $2^8$이므로 8bit, 즉 1byte의 메모리를 사용한다.
 + 따라서 한 픽셀을 표현하는데 3byte가 사용된다.
 + 그러므로 전체 이미지의 크기 (247,680byte = 약 241kb) = 픽셀의 수 (82560) * 픽셀 당 메모리 (3byte)
 
