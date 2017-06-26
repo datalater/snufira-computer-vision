@@ -13,7 +13,26 @@
 
 ---
 
-## 02 Images as Functions
+## 02 Images as Functions (2)
+
+### 노이즈를 함수로 보기
+
+<p align="center"><img src="http://api.gmath.guru/cgi-bin/gmath?I%27%28x%2C%20y%29%20%3D%20I%28x%2C%20y%29%20+%20%5Ceta%28x%2Cy%29"/></p>
+
++ 노이즈(noise)란 하나의 함수(<img src="http://api.gmath.guru/cgi-bin/gmath?%5Ceta"/>)로써 기존 이미지(<img src="http://api.gmath.guru/cgi-bin/gmath?I"/>)에 더해져서 새로운 이미지(<img src="http://api.gmath.guru/cgi-bin/gmath?I%27"/>)를 만들어 낸다.
+
+### 노이즈 사례
+
++ (Salt and pepper noise) 점잡음 : 흰색과 검은색 픽셀(=점)들이 랜덤하게 분포
++ (Impulse noise) 임펄스 잡음 : 흰색 픽셀들이 랜덤하게 분포
++ (Gaussian noise) 가우시안 노이즈 : 가우시안 분포로부터 얻은 픽셀값의 변화
+
+### 노이즈 만들기
+
+
+---
+
+## 02 Images as Functions (1)
 
 ### 이미지를 다른 관점으로 보기
 
@@ -92,7 +111,30 @@ disp(class(img));      # uint8
     + int : integers
     + 8 : bit depth (값을 저장할 수 있는 비트 크기)
 
-### RESUME: `https://classroom.udacity.com/courses/ud810/lessons/3452628581/concepts/34027789540923`
+### Octave 실습 :: 이미지 블렌딩
+
+```
+% Blend two images
+function output = blend(a, b, alpha)
+    % TODO: Your code here; finally assign: output = <something>;
+    output = alpha .* a + (1-alpha) .* b;
+endfunction
+
+% function 리턴할-변수명 = 함수명(parameters);
+
+% Test code:
+dolphin = imread('dolphin.png');
+bicycle = imread('bicycle.png');
+
+result = blend(dolphin, bicycle, 0.25);
+imshow(result); % note: will result in an error if blend() returns empty or incorrect value
+```
+
+![images-as-functions](images/images-as-functions6.png )
+
++ `dolphin.jpg`를 0.25만큼, `bicycle.jpg`를 0.75만큼 섞었더니 물가에 있는 자전거 사진처럼 블렌딩 되었다.
+
+**끝.**
 
 ---
 
