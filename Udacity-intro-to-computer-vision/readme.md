@@ -15,8 +15,19 @@
 
 ## One-Sentence Summary
 
-### 01 
+### 01 Introduction
 
++ Computer Vision의 목표는 이미지를 해석하는 것이다.
+
+### 02 Image as Functions
+
++ 이미지는 2차원 좌표값 (x, y)에 픽셀 값을 가지는 함수(<img src="https://latex.codecogs.com/gif.latex?I%28x%2Cy%29"/> 또는 <img src="https://latex.codecogs.com/gif.latex?F%28i%2C%20j%29"/>)로 볼 수 있다.
+
+### 03 Filtering
+
+---
+---
+---
 ---
 
 ## 03 Filtering (2)
@@ -68,38 +79,50 @@ imshow(smoothed);
 
 ## 03 Filtering (1)
 
-### 노이즈 제거의 원리
+### 노이즈 제거에 대한 아이디어
 
-+ 노이즈 제거를 위해 몇 가지 가정을 해볼 수 있다.
++ 원래 픽셀 값을 구하기 위해 주변 픽셀 값을 평균을 내서 각 픽셀의 값으로 대체한다.
+
+![images-as-functions](images/filtering-re-01.png )
+
+### 노이즈 제거에 대한 아이디어 원리
+
++ 평균으로 노이즈 제거를 할 수 있는 이유는 다음과 같은 가정 때문이다.
   1. 원래 픽셀 값은 주변 픽셀 값과 유사했을 것이다.
   2. 각 픽셀에 더해진 노이즈는 주변 픽셀 값과 상관없었을 것(independent)이다.
 
-+ 따라서, 원래 픽셀 값을 구하기 위해 주변 픽셀 값을 평균을 내는 방법을 떠올릴 수 있다.
 
 ### 노이즈 제거의 실현 가능성
 
 + 노이즈 함수를 알면 그대로 subtraction하면 되지만 노이즈 함수를 모르므로 실제로 노이즈를 제거할 수는 없다.
-+ 또한 노이즈가 더해지면서 정보의 손실이 발생하므로 노이즈 제거는 불가능하다.
-  + ex) true pixel value + noise value = 230 + 80 = 255
++ 또한 노이즈가 더해지면서 정보의 손실이 발생하므로 완벽한 노이즈 제거는 불가능하다.
+  + ex) true pixel value + noise value = 230 + 80 = 255 (in case maximum is 255)
   + ex) convoluted value - noise value = 255 - 80 = 175
   + ex) therefore, 230 != 175
 
 ### 노이즈 제거 방법 :: Averaging vs. (Center) Weighted Averaging
 
++ Averaging : 주변 값에 가중치를 동등하게 두는 unifrom filter
++ Weighted Averaging : 중앙에 가까운 값에 더 큰 가중치를 두는 non-uniform filter (odd symmetric mask)
+
+> **Note:** odd symmetric mask : 홀수 개를 가진 대칭 필터
+
 ![images-as-functions](images/filtering01.png )
 
-+ `original` : blue line이 extremes가 가장 크므로 original이 된다.
-+ `[11111]` : green line은 blue line보다 smoother하지만 peak와 trough가 original가 다른 흐름(decrease vs. increase)이 보인다.
-  + 흐름이 달라졌다는 것은 원래 픽셀 값이 위치하는 중앙에 있는 픽셀 값 외에 주변 픽셀 값이 지나치게 영향을 미치고 있다는 뜻이다. (too much influences from the neighboring values)
-  + 즉, uniform filter를 적용해서 발생하는 결과이다.
-+ `[14641]` : pink line도 blue line보다 smoother하지만, 더 중요한 것은 original과 peak와 trough가 유사하다 점이다.
-  + peak와 trough가 유사하다는 것은 원래 픽셀 값이 위치하는 중앙의 값이 주변 값보다 더 큰 가중치를 받았다는 뜻이다. (central value had more weightage compared to the neighboring values)
-
-+ 주의사항 : 가중치 필터를 적용할 때는 필터의 합이 1이 되도록 맞춰준다.
++ `blue line` : original
++ `green line` : uniform filter를 적용한 결과
++ `red line` : non-uniform filter를 적용한 결과
++ 필터를 적용할 때는 필터의 합이 1이 되도록 맞춰준다.
   + [11111]/5
   + [14641]/16
 
++ 해석
+  1. uniform filter는 중앙으로부터 먼 값이 가까운 값과 같은 영향력을 가지므로 그 영향력이 상대적으로 지나치다. 따라서 그림의 동그라미에서 볼 수 있듯이 peak와 trough를 왜곡하는 경우가 발생했다.
+  2. non-uniform filter는 중앙에 가까울수록 영향력이 커지므로 순리에 잘 맞다. 따라서 peak와 trough가 잘 보존되었다.
+
 > **Note:** Averaging은 기본적으로 이동하면서 적용하므로 Moving Averaging을 뜻한다.
+
+@@@re-resume : 9. Correlation Filtering `https://classroom.udacity.com/courses/ud810/lessons/3417359075/concepts/34235689540923`
 
 **끝.**
 
