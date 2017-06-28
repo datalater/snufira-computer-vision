@@ -13,6 +13,98 @@
 
 ---
 
+## One-Sentence Summary
+
+### 01 
+
+---
+
+## 03 Filtering (2)
+
+### 가우시안 시그마의 의미 (sigma over a intensity)
+
++ 가우시안 분포의 넓이(width of a Gaussian)를 결정한다.
++ 블러링(blurring) 또는 스무딩(smoothing)의 변화(variance)의 정도를 결정한다.
+
+### Octave 실습
+
+```
+% Apply a Gaussian filter to remove noise
+img = imread('saturn.png');
+imshow(img);
+
+% TODO: Add noise to the image
+noise_sigma = 25;
+noise = randn(size(img)) .* noise_sigma;
+noisy_img = img + noise;
+imshow(noisy_img);
+
+% TODO: Now apply a Gaussian filter to smooth out the noise
+% Note: You may need to pkg load image;
+filter_size = 31;
+filter_sigma = 5;
+
+pkg load image;
+
+filter = fspecial('gaussian', filter_size, filter_sigma);
+
+% Apply it to remove noise
+
+smoothed = imfilter(noisy_img, filter);
+
+surf(filter);
+imagesc(filter);
+
+imshow(smoothed);
+```
+
+![images-as-functions](images/filtering02.png)
+![images-as-functions](images/filtering03.png)
+![images-as-functions](images/filtering04.png)
+
+
+
+---
+
+## 03 Filtering (1)
+
+### 노이즈 제거의 원리
+
++ 노이즈 제거를 위해 몇 가지 가정을 해볼 수 있다.
+  1. 원래 픽셀 값은 주변 픽셀 값과 유사했을 것이다.
+  2. 각 픽셀에 더해진 노이즈는 주변 픽셀 값과 상관없었을 것(independent)이다.
+
++ 따라서, 원래 픽셀 값을 구하기 위해 주변 픽셀 값을 평균을 내는 방법을 떠올릴 수 있다.
+
+### 노이즈 제거의 실현 가능성
+
++ 노이즈 함수를 알면 그대로 subtraction하면 되지만 노이즈 함수를 모르므로 실제로 노이즈를 제거할 수는 없다.
++ 또한 노이즈가 더해지면서 정보의 손실이 발생하므로 노이즈 제거는 불가능하다.
+  + ex) true pixel value + noise value = 230 + 80 = 255
+  + ex) convoluted value - noise value = 255 - 80 = 175
+  + ex) therefore, 230 != 175
+
+### 노이즈 제거 방법 :: Averaging vs. (Center) Weighted Averaging
+
+![images-as-functions](images/filtering01.png)
+
++ `original` : blue line이 extremes가 가장 크므로 original이 된다.
++ `[11111]` : green line은 blue line보다 smoother하지만 peak와 trough가 original가 다른 흐름(decrease vs. increase)이 보인다.
+  + 흐름이 달라졌다는 것은 원래 픽셀 값이 위치하는 중앙에 있는 픽셀 값 외에 주변 픽셀 값이 지나치게 영향을 미치고 있다는 뜻이다. (too much influences from the neighboring values)
+  + 즉, uniform filter를 적용해서 발생하는 결과이다.
++ `[14641]` : pink line도 blue line보다 smoother하지만, 더 중요한 것은 original과 peak와 trough가 유사하다 점이다.
+  + peak와 trough가 유사하다는 것은 원래 픽셀 값이 위치하는 중앙의 값이 주변 값보다 더 큰 가중치를 받았다는 뜻이다. (central value had more weightage compared to the neighboring values)
+
++ 주의사항 : 가중치 필터를 적용할 때는 필터의 합이 1이 되도록 맞춰준다.
+  + [11111]/5
+  + [14641]/16
+
+> **Note:** Averaging은 기본적으로 이동하면서 적용하므로 Moving Averaging을 뜻한다.
+
+**끝.**
+
+---
+
 ## 02 Images as Functions (2)
 
 ### 노이즈를 함수로 보기
@@ -29,6 +121,35 @@ $$I'(x, y) = I(x, y) + \eta(x,y)$$
 
 ### 노이즈 만들기
 
+```
+noise = randn(size(im)) .* sigma;
+output = im + noise;
+```
+
++ `randn` : 가우시안 노이즈를 만들어낸다. (평균 0, 표준편차 1)
++ `.* sigma` : 노이즈 신호에 `sigma`를 곱해서 scale 조정을 해준다.
++ `output` : 오리지널 이미지의 함수에 노이즈 함수를 더한다.
+
+### 시그마의 의미와 크기에 따른 변화 (sigma over a space)
+
++ 가우시안 노이즈에 `sigma` 2를 곱하면 분포의 형태가 어떻게 될까?
+  + 값의 개수는 변하지 않는다 : 꼭대기가 올라가지 않는다.
+  + 값의 차이가 커진다 : 분포가 넓어진다 (**widen**).
++ 오리지널 이미지에 가우시안 노이즈를 합성할 때 가우시안의 시그마를 증가시키면 오리지널 이미지의 변화량이 커진다.
++ **시그마의 의미** : 가우시안 분포의 넓이(width of Gaussian)를 결정한다.
++ **노이즈 합성에서 시그마의 크기에 따른 효과** : 합성할 오리지널 이미지의 픽셀 값의 변화량을 좌우한다. 시그마가 커질수록 값의 분포가 넓어지며 white 픽셀과 black 픽셀이 많아진다.
+
+
+### 시그마의 크기와 픽셀 값의 범위
+
++ 시그마의 크기는 아무렇게나 정할 수는 없고 적용하려는 픽셀 값(intensity or value)의 범위를 고려해야 한다.
++ 가령, 흑백 이미지에서 minmum value는 black, maximum value는 white가 될 텐데
+  + 픽셀 값의 범위가 0~255인 경우 : sigma 2를 적용하면 큰 변화가 없다.
+  + 픽셀 값의 범위가 0~1인 경우 : sigma 25를 적용하면 black과 white 픽셀이 난무하게 된다. sigma 0.1을 적용하면 적당할 것이다.
++ **노이즈 합성에서 시그마 크기의 의미** : black에서 white로 변화하는 양에 대한 비율을 뜻한다.
+  + 픽셀 값의 범위가 0~1인 경우 sigma를 0.1로 잡는다면 black에서 white로 변화하는 비율을 0.1로 잡은 것이다.
+
+**끝.**
 
 ---
 
