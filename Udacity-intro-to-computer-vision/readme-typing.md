@@ -17,13 +17,23 @@
 
 ### 01 Introduction
 
-+ Computer Vision의 목표는 이미지를 해석하는 것이다.
++ Computer Vision의 목표는 이미지를 해석(interpret)하는 것이다.
 
 ### 02 Image as Functions
 
 + 이미지는 2차원 좌표값 (x, y)에 픽셀 값을 가지는 함수($I(x,y)$ 또는 $F(i, j)$)로 볼 수 있다.
 
 ### 03 Filtering
+
++ 기존 이미지 함수에 새로운 함수를 더하면 기존 이미지가 필터링된다.
+
+### 04 Linearity and convolution
+
++ 우리가 이미지 연산에 사용할 필터링 연산은 linear하기 때문에 각 이미지 픽셀에 필터링을 적용한 것이나 전체에 필터링을 적용한 것이나 마찬가지다.
++ linear의 조건:
+  + 덧셈의 분배법칙 성립: $H(f_1+f_2) = H(f_1)+H(f_2)$
+  + 곱셈 스케일링 : $H(a \cdot f_1) = a \cdot H(f_1)$
+
 
 ---
 ---
