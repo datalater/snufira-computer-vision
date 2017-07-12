@@ -19,9 +19,91 @@
 
 ---
 
-# Lectuer 18: Segmentation
+## Lecture 20: Categorization
 
-## Clustering-based Segmentation - Mean Shift
+### Visual Recognition and Its Challenges
+
+
+
+### General Concepts of Categorization
+
++ Categorization을 해야 우리의 knowledge와 연결시켜서 이미지를 해석할 수 있다.
++ ex. 사람 뒤에 있는 산 속의 덩치 큰 물체 -> 곰 -> 위험하다
++ Categorization은 철학적 관점 3가지가 있는데 이미지에서도 같은 접근법을 사용한다.
+
+### Image Categorization with Bag of Words
+
+
+
+---
+
+## Lecture 19: Features
+
+### Why Keypoints (or Interest Points)
+
+p.3 correspondence finding
+- SIFT feature: 가장 많이 쓰이는 feature 중 하나
+
+
+p.5
+- Homography를 해보면 affine transformation으로 표현할 수 있다.
+- descriptor : 노란색 네모 박스
+- descriptor의 scale과 orientation을 어떻게 잡을 것인지 중요하다.
+- descriptor : patch를 벡터로 표현한 것 $f_A, f_B$
+- descriptor를 사용하는 이유 :
+  - dimension을 줄이기 위해
+  - 뷰 포인트, 일루미네이션(빛의 차이)의 변화에도 robust하게 만들기 위해 (raw pixel로 하면 위험하기 때문)
+
+p.6
+- repeatability : 같은 그림에 대한 서로 다른 이미지(크기나 회전의 변화)에서도 똑같은 feature가 반복적으로 뽑혀야 한다.
+
+
+p.7 trade-offs
+- repeatability를 너무 우선시하면 feature 자체가 적게 나온다.
+  - feature가 적으면 매칭 불가
+- distinctiveness를 너무 우선시하면 매칭이 잘 안된다.
+
+
+p.9
+- fixation points : 사람이 scene을 볼 때 continuous하게 보지 않는다. 이를 saccade(써캐드)라고 한다.
+  - 사람은 시점이 있고 그거를 시점과 시점 사이를 움직이는 게 아니라
+  - discrete하게 움직인다.
+
+### Local Keypoint Detectors
+
++ unusual한 point를 찾아야 애매모호함을 피할 수 있다.
+
+p.14 PCA
+- 첫 번째로 variation이 가장 큰 point가 Principle Component(PC)가 된다.
+- 두 번째로 첫 번째 PC와 직교(orthogonal)하는 point가 PC가 된다.
+- PC끼리는 반드시 수직이어야 한다.
+
+
+### Scale and Rotation
+
+p.21
+- 노란색 원 중에 뭐가 제일 좋은지 알려면 차이를 보면 된다.
+- 스케일의 기본 아이디어 : 크기를 크게 바꿔가다가 정보 차이가 크면 그것이 best 스케일일 것으로 추정
+
+p.22
+- 라플라시안 필터를 사용한다.
+- 라플라시안 필터의 response가 커지는 곳을 잡아라.
+- 안과 밖의 차이가 커지면 respoonse가 커지기 때문이다.
+- 라플라시안은 가우시안의 차이(DoG, Difference of Gaussian)로 사용한다.
+
+
+### Local Descriptors
+
+p.32 SIFT
+
+**끝.**
+
+
+---
+
+## Lectuer 18: Segmentation
+
+### Clustering-based Segmentation - Mean Shift
 
 - Mean Shift 굉장히 많이 씀. 알고 있으면 좋음.
 
@@ -141,9 +223,9 @@ p.39
 
 ---
 
-# Lecture 17: Grouping and Clustering
+## Lecture 17: Grouping and Clustering
 
-## Gestalt grouping
+### Gestalt grouping
 
 p.11
 + 사람은 이 그림을 보면서 자동으로 그룹핑을 한다.
@@ -157,7 +239,7 @@ p.13 Gestalt Cues를 하는 이유
 - occlusion reasoning에 사용되므로
 
 
-## Clustering: K-means/Agglomerative/Spectral
+### Clustering: K-means/Agglomerative/Spectral
 
 + 클러스터링 알고리즘 수만 개
 + 많이 해봤겠지만 여전히 잘 안 됨
@@ -243,13 +325,13 @@ p.42 segmentation은 bottom-up과 top-down 방식이 있다
 
 ---
 
-# Lecture 13: Stereo I (Lecture 16 다음 순서)
+## Lecture 13: Stereo I (Lecture 16 다음 순서)
 
-## Camera Model
+### Camera Model
 
 + 나중에 함
 
-## Binocular Stereo
+### Binocular Stereo
 
 p.9
 + 인간의 눈 2개: 3차원을 이해하기 위해.
@@ -294,7 +376,7 @@ p.23
   + correspondent point를 자동으로 찾는 것이 어렵기 때문.
 
 
-## Other 3D Methods
+### Other 3D Methods
 
 p.2
 + 그래서 3D 정보를 알아낼 때 이미지가 아니라 Active Streo를 쓰는 것이 대세이다.
@@ -314,9 +396,9 @@ p.6
 
 ---
 
-# Lecuter 16: Lukas-Kanade Tracking (루카스-카나데, 최초의 tracking algorithm)
+## Lecuter 16: Lukas-Kanade Tracking (루카스-카나데, 최초의 tracking algorithm)
 
-## Optical Flow
+### Optical Flow
 
 Spatial Coherence
 - 포인트만으로는 coherence를 알 수 없으니 area-based로 보자.
@@ -326,7 +408,7 @@ Temporal Persistence
 - small motion과 비슷한 맥락
 
 
-## Lucas-Kanade algorithm (Translation, 기본 아이디어)(수치해석, 루트파인딩 관련)
+### Lucas-Kanade algorithm (Translation, 기본 아이디어)(수치해석, 루트파인딩 관련)
 
 루트파인딩을 하는 이유
 - optimization에 중요하므로.
@@ -352,7 +434,7 @@ p.20 단점
   - p : parameter도 구해야 한다.
 
 
-## Lucas-Kanade algorithm (General)
+### Lucas-Kanade algorithm (General)
 
 p.22
 - affine이라면 p가 6개가 된다.
@@ -386,7 +468,7 @@ p.
 
 ---
 
-# Lecture 15: Optical Flow (비디오 관련된 것)
+## Lecture 15: Optical Flow (비디오 관련된 것)
 
 가장 중요한 슬라이드
 - p.12 Equation
@@ -464,9 +546,9 @@ p.23
 
 ---
 
-# Lecture 12: Homography and Image Warping
+## Lecture 12: Homography and Image Warping
 
-## Image Mosaicing 이미지 모자이싱
+### Image Mosaicing 이미지 모자이싱
 
 이미지 모자이싱
 - 여러 장의 사진을 찍어서 겹치는 부분을 잘 처리해서 하나의 사진으로 만드는 것
@@ -486,7 +568,7 @@ p.14 호모그래피
 - T 행렬의 요소인 unknown 9개를 찾는 것 (i=1이면 unknown 8개)
 
 
-## Comput Homography
+### Compute Homography
 
 p.18
 - correspondent를 구한 후 tx, ty만큼 이동시킨다.
@@ -505,7 +587,7 @@ p.27
 - correspondent 1개에 대한 식
 
 
-## 2D Image Warping
+### 2D Image Warping
 
 p.29
 - 오리지널 이미지에 행렬 T를 적용하는 것이 아니라
@@ -541,9 +623,9 @@ p.39
 
 ---
 
-# Lecture 11: Image Alignment
+## Lecture 11: Image Alignment
 
-## Image Alignment
+### Image Alignment
 
 Paper에 발표되는 vision의 결과물
 - ex. 고흐 화풍으로 그림 바꾸기
@@ -607,7 +689,7 @@ p.21
 - i는 1로 고정해도 상관없다. 어차피 w'로 나눠줄 것이기 때문.
 
 
-## RANSAC
+### RANSAC
 
 p.24
 - 먼저 어떤 Transformation을 구할지 정한다.
@@ -636,15 +718,15 @@ p.39
 
 ---
 
-# Lecture 05: Edge detection
+## Lecture 05: Edge detection
 
 @@@프린트에 필기했음
 
 ---
 
-# Lecture 09: Image Formation and Optics
+## Lecture 09: Image Formation and Optics
 
-## A Brief History of Images 카메라의 역사
+### A Brief History of Images 카메라의 역사
 
 2가지 반사
 - 물체 고유에 대한 반사 material 반사
@@ -713,7 +795,7 @@ p.39
 
 ---
 
-## 핀홀 카메라
+### 핀홀 카메라
 
 p.21
 - 빛을 측정할 수 있는 필름이 있다고 해보자.
@@ -750,7 +832,7 @@ p.28
 
 ---
 
-## 3D to 2D
+### 3D to 2D
 
 p.30
 - 사진을 찍기 어려운 이유 : 실제 물체는 3D인데 2D로 나타내야 하므로
@@ -790,9 +872,9 @@ p.46
 
 ---
 
-# Lecture 10 : Image Formation and Optics II
+## Lecture 10 : Image Formation and Optics II
 
-## Projection Matrix 이미지 plane 상의 좌표와 실제 오브젝트의 좌표의 관계
+### Projection Matrix 이미지 plane 상의 좌표와 실제 오브젝트의 좌표의 관계
 
 p.4~5
 - linear 하지 않다 : 하나의 매트릭스 multiplication으로 표현할 수가 없다.
@@ -823,7 +905,7 @@ p.10
 
 ---
 
-## Camera with Lenses
+### Camera with Lenses
 
 p.12
 - 이상적인 렌즈의 역할 : object의 포인트에서 반사되는 모든 빛을 필름에서 하나의 포인트로 모아주는 것
@@ -861,7 +943,7 @@ p.26
 p.28
 - 영화 테크닉 Dolly zoom 달리 줌
 
-## Lens Flaws 렌즈 오류
+### Lens Flaws 렌즈 오류
 
 p.32
 - 빛이 굴절한다.
@@ -906,9 +988,9 @@ p.42
 
 ---
 
-# Lecture 02: Image Processing
+## Lecture 02: Image Processing
 
-## 1. Digital Image Processing
+### 1. Digital Image Processing
 
 @@@ resume
 
@@ -920,9 +1002,9 @@ p.42
 
 ---
 
-# Lecture 01 - Introduction to Computer Vision
+## Lecture 01 - Introduction to Computer Vision
 
-## 1. Introduction to Computer Vision
+### 1. Introduction to Computer Vision
 
 ### Computer vision이란 무엇인가 (1)
 
