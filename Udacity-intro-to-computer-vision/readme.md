@@ -27,17 +27,67 @@
 
 + 기존 이미지 함수에 새로운 함수를 더하면 기존 이미지가 필터링된다.
 
-### 04 Linearity and convolution
+### 04 Linearity
 
-+ 우리가 이미지 연산에 사용할 필터링 연산은 linear하기 때문에 각 이미지 픽셀에 필터링을 적용한 것이나 전체에 필터링을 적용한 것이나 마찬가지다.
++ 오리지널 이미지에 필터를 적용해서 새로운 이미지를 만드는 것을 이미지 프로세싱이라 한다.
++ 이미지 프로세싱에서 사용하는 필터링 연산은 linear하다.
++ linear하기 때문에 각 이미지 픽셀에 필터링을 적용한 것이나 전체에 필터링을 적용한 것이나 마찬가지 결과를 얻는다.
 + linear의 조건:
   + 덧셈의 분배법칙 성립: <img src="https://latex.codecogs.com/gif.latex?H%28f_1+f_2%29%20%3D%20H%28f_1%29+H%28f_2%29"/>
   + 곱셈 스케일링 : <img src="https://latex.codecogs.com/gif.latex?H%28a%20%5Ccdot%20f_1%29%20%3D%20a%20%5Ccdot%20H%28f_1%29"/>
 
+### 04 Convolution
+
++ convolution을 한다는 것은 오리지널 이미지에 필터를 적용한다는 뜻이다.
++ convolution은 상하좌우의 차원(flip in both dimensions, bottom to top, right to left)을 뒤집는다.
+
+### 04 linearity와 convolution
+
++ convolution은 linear operator(=필터)를 사용하므로 다음과 같은 성질을 갖는다.
+  + 시프트 불변 Shift Invariant : 같은 픽셀에 대해서는 회전이 되었든 위치가 변경되었든 간에 같은 operation의 결과값을 산출한다.
+  + 교환법칙 Commutative : <img src="https://latex.codecogs.com/gif.latex?f*g%3Dg*f"/>
+  + 결합법칙 Associative : <img src="https://latex.codecogs.com/gif.latex?%28f*g%29%20*%20h%20%3D%20f%20*%20%28g*h%29"/>
+  + Identity : unit impulse e, <img src="https://latex.codecogs.com/gif.latex?f%20*%20e%20%3D%20f"/>
+  + Differentiation : <img src="https://latex.codecogs.com/gif.latex?%20%28%5Cdelta%20/%20%5Cdelta%20x%29%20%28f%20*%20g%29%20%3D%20%28%5Cdelta%20f%20/%20%5Cdelta%20x%29%20*%20g%20"/>
+
+### 04 결합법칙을 통해 필터의 convolution 연산 속도가 개선된다
+
+#### 3 by 3 필터로 convolution을 하면 느리다
+
++ 3 by 3으로 구성된 convolution 필터를 떠올려보자.
++ 이미지가 N by N 픽셀일 때 총 연산 횟수는 <img src="https://latex.codecogs.com/gif.latex?N*N*3*3"/>이 된다.
+
+#### 필터를 3 by 1 * 1 by 3으로 나눠서 convolution하면 훨씬 빠르다
+
++ 그런데 3 by 3 필터는 3 by 1 칼럼벡터와 1 by 3 로우벡터의 곱셈으로 나타낼 수 있다.
++ 두 벡터 중 하나를 먼저 이미지에 convolution하고 나서 나머지 벡터를 convolution하면 된다.
++ <img src="https://latex.codecogs.com/gif.latex?%28f*g%29%20*%20h"/> 대신에 <img src="https://latex.codecogs.com/gif.latex?f%20*%20%28g*h%29"/>를 사용한다.
++ 연산 속도가  <img src="https://latex.codecogs.com/gif.latex?3%5E%7B2%7D%20*%20N%5E%7B2%7D"/>에서 <img src="https://latex.codecogs.com/gif.latex?2*3*N%5E%7B2%7D"/>으로 개선된다.
+
+#### 일반화
+
++ 필터 크기 W by W, 이미지 크기 N by N일 때
++ <img src="https://latex.codecogs.com/gif.latex?2*W*N%5E%7B2%7D%20%3C%3C%20W%5E%7B2%7D%20*%20N%5E%7B2%7D"/>
++ 이렇게 필터를 separate할 수 있는 이유는 convolution 필터가 linear하므로 결합법칙을 쓸 수 있기 때문이다.
+
+### 04 correlation vs. convolution
+
+- correlation : move around
+- convolution : flip over and move around
+
+### 04 네거티브를 이해하면 unsharp mask가 sharper 이미지를 만든다.
+
++ 오리지널 이미지 - unsharpk mask = sharper 이미지
++ "**\- unsharper mask**"는 네거티브와 같다.
+
+@@@resume : `https://classroom.udacity.com/courses/ud810/lessons/3461518740/concepts/34384591140923`
 
 ---
 ---
 ---
+---
+
+
 ---
 
 ## 03 Filtering (2)
