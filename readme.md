@@ -19,11 +19,211 @@
 
 ---
 
+## Lecture 22: Detection
+
+### Object detection
+
+p.7 parts model
+- 중요한 part 간의 상대적인 거리가 존재한다.
+- 사람 관련 detection에 꽤 많이 쓰임
+
+p.10
+- 이미지에서 object가 있을 만한 곳에 대한 patch를 찾아내는 것
+
+p.14
+- segmentation 후 segmentation의 수많은 조합 고려
+
+p.18
+- Non-max suppresion : 가장 높은 것 제외 나머지 버린다
+
+p.19 context/reasoning
+- 카메라 높이보다 어떠하면 공중에 떠 있는 것이다 -> 사람 아님
+
+### Statistical Template Approach
+
+p.26 R-CNN
+- CNN에는 정사각형 input이 들어가는게 좋다
+- 그래서 정사각형으로 이미지 워핑을 한다.
+- R: Region
+
+p.28
+- tight한 decision boundary를 정하려면 positive example뿐만 아니라 negative example도 잘 구해야 한다.
+  - ex. pedestrian 구별에서 사람 비스무리한 것을 negative로 넣어야지 너무 사람 아닌 것을 넣으면
+  - tight한 decision boundary를 구하기 어렵다.
+
+
+### Parts-based Models
+
+p.32
+- 자동차를 보면 part간에 geometric한 관계가 정해져 있다.
+
+
+p.34
+- tree : 임의의 노드 2개를 정했을 때 2개의 노드를 잇는 path가 한 개밖에 없는 경우
+
+
+p.37 DPM
+- 딥러닝 이전 최고의 알고리즘
+- 전체 template, part에 대한 template, part간의 관계에 대한 template
+- root filter : object 전체에 대한
+- spatial costs : 상대적인 거리가 멀어질수록 값이 적어진다.
+
+
+p.42
+- 빨간색 네모 : object detection
+- 파란색 네모 : part detection
+
+**컴퓨터비전 끝.**
+
+---
+
+## Lecture 21: Classification
+
++ 제한된 환경에서는 classfication 잘 된다. (ImageNet)
+
+### Image Classifiers
+
+p.3
+- image classification : 이미지를 하나의 D-dimension으로 나타내서 진행한다.
+- 가장 간단한 image Classification : skin detection
+  - skin이냐 skin이 아니냐
+- skin detection: 이미지의 각 픽셀을 하나의 D-dimension의 벡터스페이스인 RGB color space에 맵핑한다.
+  - RGB feature space에 skin이 모이게 된다.
+
+
+p.4~ 분류기를 디자인하는 여러 가지 방법
+- (1) K-Nearest neighbor
+- Data modeling
+  - (2) Generative : training data로부터 skin의 '**분포를 알아낸다**'.
+    - ex. skin 데이터들이 특정 가우시안 분포를 따르는구나
+    - 분류 방법 : 각 데이터가 label된 skin 데이터에 fitting될 likelihood를 구한다.
+    - ex. Naive Bayesian
+  - (3) Discriminative : training data로부터 skin을 구별하는 +,-의 '**decision boundary**'를 정한다.
+    - 장점 : 직접 분류 가능
+    - 단점 : unsupervised learning에서는 사용 불가
+    - ex. SVM
+
+> **Note:** Generative보다 Discriminative로 분류하는 것이 더 직접적이고 간단하다.
+
+p.7 이미지를 D-dimension으로 나타내는 image features, 어떻게 하나
+- 무엇을 분류하느냐에 따라 기준이 달라진다.
+- beach : color or layout
+- cloth fabric : texture
+- mug : shape
+
+> **Note:** 딥러닝 : data와 task에 따라 적절한 feature를 스스로 학습한다. ex. CNN에서 수많은 레이어의 거의 전부가 feature를 뽑아내는 레이어이고 분류 레이어는 마지막 하나이다.
+
+p.9
+- image representation: 이미지를 D-dimension의 벡터로 바꾼 것
+
+p.11
+- classifier : 함수
+  - $f: R^{D} \rightarrow {-1, +1}$
+  - positive : +1, negative : -1
+
+p.14
+- logistic regression을 k개로 확장한 것이 딥러닝 알고리즘 softmax이다.
+- 괜찮은 classifiers
+  - randomized forests : 사이즈도 작고 성능도 좋다.
+  - boosted decision trees
+  - SVM
+- 쓰지마라
+  - RBMs
+- 하지만 결국 각 classifiers의 특징을 알고 적절한 task에 사용해야 한다.
+
+### Exemplar-based Models
+
+p.16
+- K-nearest neighbor classfier를 생각하면 된다.
+
+p.19
+- K를 홀수로 해라 : 짝수면 동점일 때 또 나눠야 함
+- KNN을 lazy learning이라 한다
+  - training 시점에는 아무것도 안하다가
+  - test example이 나오면 그제서야 nearest neighbor를 찾는다.
+- KNN은 연구자의 feature extraction이 얼마나 좋은지 평가할 때 좋다.
+- K가 커질수록 더 많은 label을 고려하므로 더 멀리 있는 training example까지 고려하므로 smooth하다.
+- Bayes optimal error : classification으로 도달할 수 있는 최대의 오류
+
+
+### Discriminative Models
+
+p.21
+- 얼굴인지 아닌지 분류하기
+
+
+p.26
+- False Positive : Negative인데 Positive로 False 했다.
+
+
+p.27~ Discriminative, SVM
+- positive와 negative를 나누는 평면을 찾는다.
+- 평면 : decision boundary 역할
+- feature space의 decision boundary
+  + 2차원 : $ax+by+c=0$
+  + 4차원 : $ax+by+cz+dw = 0$
+
+p.30 error가 0인 decision boundary가 여러 개일 때 어떻게 정하나
+- margin이 최대가 되는 line을 decision boundary로 정해야 한다.
+- 요점 : decision boundary 정할 때 error를 사용하지 말고 margin을 사용해라.
+- margin을 maximize해야 제대로 분류할 수 있다.
+
+
+p.32 SVM
+- SVM : margin을 최대로 하는 decision boundary를 정하는 알고리즘
+- support vector : boundary에서 가장 가까운 데이터 샘플
+  - positive support vector : positive쪽 support vector
+  - negative support vector : negative쪽 support vector
+- decision boundary를 정할 때는 positive support vector와 negative support vector만 있으면 된다.
+- support vector가 decision boundary를 정한다.
+
+
+p.36 Kernel Trick
+- 두 가지 옵션
+  - (1) feature의 차원을 그대로 두고 polynomial line
+  - (2) feature의 차원을 높인 후 1차원 line
+  - 수학적으로 (2)가 더 낫다
+
+
+### Generative Models
+
+p.39 Generative
+- joint probability를 구한다.
+- Generative vs. Discriminative
+  - G : $P(x, y)$
+    - Bayes Rule 이용
+  - D : $P(y | x)$
+    - feature가 들어왔을 때 -1인지 +1인지 정한다.
+
+p.40 Bayes Classifier
+- ex. 어떤 단어가 들어갔을 때 스팸 메일일 확률
+- argmax :
+
+
+p.42
+- virtual counts : 확률값이 0이 되는 것을 막아주기 위해 작은 숫자(ex.2)를 더해준다.
+
+
+p.43
+- parameter : training data로부터 배우는 것
+- hyper parameter : 연구자가 직접 값을 지정해야 함
+- Imbalanced classifiers
+  - 분류 label 각각의 개수가 다른 상태에서 learning하게 될 때
+  - ex. 숫자1 - 천만 장, 숫자2 -3백만 장
+
+p.44
+- 가장 많이 쓰는 분류기 순서
+
+**끝.**
+
+
+---
+
 ## Lecture 20: Categorization
 
 ### Visual Recognition and Its Challenges
 
-
++ ...
 
 ### General Concepts of Categorization
 
