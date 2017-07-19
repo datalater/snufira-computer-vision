@@ -7,7 +7,52 @@ TA 실습시간
 
 ## 용어
 
-+ `ROI` : region of interest
++ `ROI` : Region of Interest
++ `blob` : 비슷한 픽셀값을 가지는 이미지 내 영역
+  + 비슷하거나 공통된 특징을 가지는 이미지의 특정 영역
+  + blob detection을 위해 convolution이 가장 흔하게 사용된다.
+
+---
+
+## One-Sentence Summary
+
+### 02 Image Gradient와 Edge Detection
+
++ 특정 방향에 대한 픽셀값의 변화량을 gradient라고 한다.
++ edge는 픽셀값이 급격하게 변화하는 곳이다.
++ 이미지의 gradient를 구했을 때 gradient 값이 큰 곳이 edge일 가능성이 높다.
+
+
+### 02 Image Gradient와 미분
+
++ 이미지의 gradient를 구하는 것이 곧 이미지를 미분하는 방법이다.
+
+### 02 Sobel operator(=filter)
+
++ Sobel이라는 사람이 주장했던 미분 근사법이다.
++ cetner row 또는 center column 픽셀값을 0으로 만들고 주변 픽셀값의 차이만 드러내는 연산을 한다.
+
+![right-sobel-and-up-sobel](https://homepages.inf.ed.ac.uk/rbf/HIPR2/figs/sobmasks.gif)
+
++ Gx : x방향 gradient smoothing
++ Gx : y방향 gradient smoothing
+
+### 02 Canny Edge Detector
+
++ (1) 노이즈가 edge로 오해될 수 있으므로, 가우시안 스무딩을 통해 노이즈를 감소시킨다.
++ (2) edge를 구하기 위해, x, y 방향으로 image gradient를 구한다.
++ (3) edge는 얇게 구할수록 좋은 edge이므로, gradient값 중에서 maximum이 아니면 0으로 보낸다.
+  + gradient값이 실수값이다 보니 픽셀 사이에 위치할 수 있는데 이때는 더 가까운 쪽으로 interpolation한다.
++ (4) weak edge가 실제 edge인지 판단하기 위해, 주변의 값을 참조하는 hysteresis thresholding을 한다.
+  + weak edge : true edge에서 나온 건지 노이즈(또는 color variation)으로부터 나온건지 불분명한 edge
+  + true edge에서 나왔다면 strong edge와 연결되지만 노이즈으로부터 나왔다면 연결되지 않는다.
+  + hysteresis thresholding : double thresholding + edge tracking을 통해 strong edge가 주변에 있는지 고려한다.
+
+> **Note:** (3) : Non-Maximum Suppression (NMS) | thresholding : 경계값 설정
+
+### 02 Code :: Canny Edge Detector
+
++ @@@resume
 
 ---
 
@@ -80,5 +125,27 @@ step4) step2와 step3을 반복하다가 센터가 움직이지 않으면 멈춘
 ### Homography
 
 + 좌표이동을 하는 이미지 변환 matrix
+
+---
+
+## 02 Edge Detection
+
+### Image Gradient와 Edge Detection
+
++ 픽셀값의 변화를 gradient라고 한다.
++ edge는 픽셀값이 급격하게 변화하는 곳이다.
++ 이미지의 gradient를 구했을 때 gradient 값이 급격하게 변하는 곳이 edge이다.
+
+### Sobel operator(=filter)
+
++ cetner row 또는 center column 픽셀값을 0으로 만들고 주변 픽셀값의 차이만 드러낸다.
+
+![right-sobel-and-up-sobel](https://homepages.inf.ed.ac.uk/rbf/HIPR2/figs/sobmasks.gif)
+
+### Canny Edge Detector
+
+
+
+
 
 ---
