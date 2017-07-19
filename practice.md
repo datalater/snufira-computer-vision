@@ -77,4 +77,8 @@ step4) step2와 step3을 반복하다가 센터가 움직이지 않으면 멈춘
 
 + 이미지에 soble filter를 적용하면 각 픽셀의 gradient값을 구할 수 있다.
 
+### Homography
+
++ 좌표이동을 하는 이미지 변환 matrix
+
 ---
