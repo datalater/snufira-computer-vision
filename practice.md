@@ -11,10 +11,23 @@ TA 실습시간
 + `blob` : 비슷한 픽셀값을 가지는 이미지 내 영역
   + 비슷하거나 공통된 특징을 가지는 이미지의 특정 영역
   + blob detection을 위해 convolution이 가장 흔하게 사용된다.
++ `interpolation` : 연산의 결과값이 discrete 값 사이에 있다면 더 가까운 값으로 근사시킨다.
++ `smoothing(=blur)` : 픽셀 간의 값 차이를 줄이는 것 (↔ sharpening)
+
 
 ---
 
 ## One-Sentence Summary
+
+### 02 Edge의 정의와 Edge를 구하는 방법
+
++ Edge란 이미지 상에 나타나는 discontinuity를 말한다.
+  + surface normal이 급격히 달라지는 부분
+  + depth가 급격히 달라지는 부분
+  + surface color가 급격히 달라지는 부분
+  + illumination이 급격히 달라지는 부분
+
++ 급격히 달라지는 부분은 image gradient로 구할 수 있다.
 
 ### 02 Image Gradient와 Edge Detection
 
@@ -22,37 +35,58 @@ TA 실습시간
 + edge는 픽셀값이 급격하게 변화하는 곳이다.
 + 이미지의 gradient를 구했을 때 gradient 값이 큰 곳이 edge일 가능성이 높다.
 
-
-### 02 Image Gradient와 미분
-
-+ 이미지의 gradient를 구하는 것이 곧 이미지를 미분하는 방법이다.
+> **Note:** 이미지의 gradient를 구하는 것이 곧 이미지를 미분하는 방법이다.
 
 ### 02 Sobel operator(=filter)
 
-+ Sobel이라는 사람이 주장했던 미분 근사법이다.
-+ cetner row 또는 center column 픽셀값을 0으로 만들고 주변 픽셀값의 차이만 드러내는 연산을 한다.
++ image gradient를 구하는 방법 중 하나가 Soble operator를 사용하는 것이다.
++ center row 또는 center column 픽셀값을 0으로 만들고 주변 픽셀값의 차이만 드러내는 연산을 한다.
 
 ![right-sobel-and-up-sobel](https://homepages.inf.ed.ac.uk/rbf/HIPR2/figs/sobmasks.gif)
 
 + Gx : x방향 gradient smoothing
 + Gx : y방향 gradient smoothing
 
+> **Note:** Sobel이라는 사람이 주장했던 이미지의 미분 근사법이다.
+
+### 02 노이즈와 edge
+
++ 노이즈는 주변 픽셀과 비교했을 때 값이 급격히 달라진다.
++ 그래서 노이즈는 edge로 오해받을 수도 있다.
++ 따라서 edge를 구하려면 image gradient를 구하기 전에 노이즈를 먼저 감소시켜야 한다.
+
+> **Note**: trade-off : 스무딩을 강하게 할수록 노이즈는 줄어들지만, edge가 blur된다.
+
 ### 02 Canny Edge Detector
 
-+ (1) 노이즈가 edge로 오해될 수 있으므로, 가우시안 스무딩을 통해 노이즈를 감소시킨다.
-+ (2) edge를 구하기 위해, x, y 방향으로 image gradient를 구한다.
-+ (3) edge는 얇게 구할수록 좋은 edge이므로, gradient값 중에서 maximum이 아니면 0으로 보낸다.
++ (1) 노이즈가 edge로 오해될 수 있으므로, '**가우시안 스무딩**'을 통해 노이즈를 감소시킨다.
++ (2) edge를 구하기 위해, x, y 방향으로 '**image gradient**'를 구한다.
++ (3) edge는 얇게 구할수록 좋은 edge이므로, **gradient값 중에서 maximum이 아니면 0으로 보낸다(NMS)**.
   + gradient값이 실수값이다 보니 픽셀 사이에 위치할 수 있는데 이때는 더 가까운 쪽으로 interpolation한다.
-+ (4) weak edge가 실제 edge인지 판단하기 위해, 주변의 값을 참조하는 hysteresis thresholding을 한다.
-  + weak edge : true edge에서 나온 건지 노이즈(또는 color variation)으로부터 나온건지 불분명한 edge
-  + true edge에서 나왔다면 strong edge와 연결되지만 노이즈으로부터 나왔다면 연결되지 않는다.
-  + hysteresis thresholding : double thresholding + edge tracking을 통해 strong edge가 주변에 있는지 고려한다.
++ (4) weak edge가 실제 edge인지 판단하기 위해, '**strong edge 같은 주변의 값을 참조하는 hysteresis thresholding**'을 한다.
 
 > **Note:** (3) : Non-Maximum Suppression (NMS) | thresholding : 경계값 설정
+
+### 02 Canny Edge Detector :: weak edge
+
++ true edge에서 나온 건지 노이즈(또는 color variation)으로부터 나온건지 불분명한 edge
+  + weak edge가 true edge에서 나왔다면 strong edge와 연결된다.
+  + weak edge가 노이즈로부터 나왔다면 strong edge와 연결되지 않는다.
+
+
+### 02 Canny Edge Detector :: hysteresis thresholding
+
++ double thresholding + edge tracking
++ high level threshold를 설정해서 strong edge를 그리고, low level threshold를 설정해서 weak edge를 strong edge에 연결한다.
 
 ### 02 Code :: Canny Edge Detector
 
 + @@@resume
+
+### 02 Image Pyramid
+
++ 이미지 피라미드란, 기존 이미지를 x와 y방향으로 반으로 줄이는 것을 반복하여 층층이 여러 개 쌓은 것을 말한다.
+
 
 ---
 
