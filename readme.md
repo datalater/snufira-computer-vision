@@ -6,6 +6,17 @@
 
 ---
 
+## FFT (from 다크 프로그래머 블로그)
+
+### 푸리에 변환
+
++ time domain에서 표현된 signal을 frequency domain의 표현으로 변환해주는 것
+  + 예를 들어 time domain에서 sound는 time axis에 따라 위아래로 요동치는 파형을 보인다.
+  + time domain의 sound signal을 frequency domain으로 바꾸면 어떤 frequency(=주파수) 성분으로 구성되어 있는지 표현한다.
+  + 
+
+---
+
 # II. 용어 정리
 
 ### 01 Introduction to Computer Vision
